@@ -57,10 +57,10 @@ public class Indexer {
      *  Initializes the index as a HashedIndex.
      */
     public Indexer() {
-		/*if(HASHED_INDEX == 0) {
+		if(SearchGUI.kindOfIndex == Index.HASHED_INDEX) {
 			index = new HashedIndex();
-		}*/
-		if(Index.BIWORDS_INDEX == 2) {
+		}
+		else if(SearchGUI.kindOfIndex == Index.BIWORDS_INDEX) {
 			index = new BiwordIndex();
 		}
     }
