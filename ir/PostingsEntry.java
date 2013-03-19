@@ -8,6 +8,7 @@
 
 package ir;
 
+import java.util.HashSet;
 import java.util.HashMap;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -74,13 +75,18 @@ public class PostingsEntry implements Comparable<PostingsEntry>, Serializable {
     	this.squareQuery = 1;
     }
     
+    public void computeScore(int nbDocsWithWord, HashMap<Integer,Integer> numberDocs, HashMap<String,Integer> docLengths, Query query, String termQuery) {
+    	// Compute here the new score
+    	double N = (double)numberDocs.size();
+    	this.score = (query.weights.get(termQuery))*((double)list.size())*Math.log(N/nbDocsWithWord)/docLengths.get(""+docID);
+    	this.sommeCarre = this.score*this.score;
+    	this.squareQuery = 1;
+    }
+    
     public void normalizeScore() {
     	//System.err.println("ok");
     	this.score = this.score/(Math.sqrt(this.squareQuery)*Math.sqrt(this.sommeCarre));
     }
-    //
-    //  YOUR CODE HERE
-    //
 
 }
 

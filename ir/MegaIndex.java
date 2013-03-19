@@ -262,6 +262,11 @@ public class MegaIndex implements Index {
 			return null; //next labs
 		}
     }
+    
+    public void addTerm(int docID, String token)
+    {
+    // nothing
+    }
 
 }
 

@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Iterator;
+import java.util.HashSet;
 //import java.util.Collections.sort;
 
 
@@ -34,7 +35,7 @@ public class HashedIndex implements Index {
 	//
 	//  YOUR CODE HERE
 	//
-		;
+		//;
 		if(numberDocs.containsKey(docID)) {
 			Integer n = numberDocs.get(docID);
 			numberDocs.put(docID,n+1);
@@ -55,9 +56,7 @@ public class HashedIndex implements Index {
      *  if the term is not in the index.
      */
     public PostingsList getPostings( String token ) {
-	// 
-	//  REPLACE THE STATEMENT BELOW WITH YOUR CODE
-	//
+    
 		return index.get(token);
     }
 
@@ -66,10 +65,9 @@ public class HashedIndex implements Index {
      *  Searches the index for postings matching the query.
      */
     public PostingsList search( Query query, int queryType, int rankingType ) {
-	// 
-	//  REPLACE THE STATEMENT BELOW WITH YOUR CODE
-	//
+
 		PostingsList result = null;
+		double time = 0;
 		
 		/*****************************
 		****CASE OF TF_IDF RANKING****
@@ -92,20 +90,25 @@ public class HashedIndex implements Index {
 				return result;
 			} 
 			else if(queryType == Index.RANKED_QUERY){
+				time = System.nanoTime();
 				PostingsList tabScoresTerms[] = new PostingsList[query.terms.size()];
+				String termQuery = "";
+				System.err.println("Query : "+query.terms.size());
+				//System.err.println("Query : "+query.terms.size());
 				for(int i=0; i<query.terms.size(); i++) {
+					termQuery = query.terms.get(i);
 					if(getPostings(query.terms.get(i)) == null)
 						tabScoresTerms[i] = new PostingsList();
 					else {
 						tabScoresTerms[i] = getPostings(query.terms.get(i));
-						tabScoresTerms[i].computeScore(numberDocs, docLengths);
+						tabScoresTerms[i].computeScore(numberDocs, docLengths, query, termQuery);
 					}
 				}
 			
 				result = tabScoresTerms[0];
 				
 				for(int i=1; i<query.terms.size(); i++) {
-					System.err.println(result.size());
+					//System.err.println(result.size());
 					result = result.reunion(tabScoresTerms[i]); //In PostingsList
 				}
 			
@@ -117,6 +120,8 @@ public class HashedIndex implements Index {
 				}
 
 				result2.sortPosList();
+				time = System.nanoTime() - time;
+				System.err.println(time+" nanoseconds");
 				return result2;
 			}
 			else {
@@ -208,6 +213,17 @@ public class HashedIndex implements Index {
 				return null;
 			}
     	}
+    }
+    
+    public void addTerm(int docID, String token)
+    {
+        HashSet<String> tmp = terms.get(docID);
+        if(tmp == null)
+        {
+            tmp = new HashSet<String>();
+            terms.put(docID, tmp);
+        }
+        tmp.add(token);
     }
     
     /**

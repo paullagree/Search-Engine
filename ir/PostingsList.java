@@ -47,6 +47,16 @@ public class PostingsList implements Serializable {
 		
     }
     
+    void computeScore(HashMap<Integer,Integer> numberDocs, HashMap<String,Integer> docLengths, Query query, String termQuery) {
+    	ListIterator<PostingsEntry> it = list.listIterator(0);
+    	int nbDocsWithWord = list.size();
+    	while(it.hasNext()) {
+			PostingsEntry cur = it.next();
+			cur.computeScore(nbDocsWithWord, numberDocs, docLengths, query, termQuery);
+		}
+		
+    }
+    
     void sortPosList() {
     	Collections.sort(list);
     }

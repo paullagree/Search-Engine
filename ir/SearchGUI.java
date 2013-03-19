@@ -60,7 +60,7 @@ public class SearchGUI extends JFrame {
     public static PageRank pageRank = null;
 
     /**  Directory from which the code is compiled and run. */
-    public static final String homeDir = "/home/paul/Dropbox/KTH/Search Engines and Information Retrieval Systems/Lab1";
+    public static final String homeDir = "/home/paul/Dropbox/KTH/Search Engines and Information Retrieval Systems/Lab1/Search-Engine";
 
 
     /*
