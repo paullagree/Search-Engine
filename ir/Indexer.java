@@ -63,6 +63,9 @@ public class Indexer {
 		else if(SearchGUI.kindOfIndex == Index.BIWORDS_INDEX) {
 			index = new BiwordIndex();
 		}
+		else if(SearchGUI.kindOfIndex == Index.NGRAM_INDEX) {
+			index = new NGramIndex();
+		}
     }
 
     /** 

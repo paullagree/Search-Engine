@@ -93,7 +93,7 @@ public class Query {
         	if(docIsRelevant[i]) {
         		int docID = results.get(i).docID;
                 HashSet<String> currDocRelevant = indexer.index.terms.get(docID);
-                int length = currDocRelevant.size();//indexer.index.docLengths.get(""+docID);
+                int length = currDocRelevant.size();
                 int numberOfDocs = indexer.index.docLengths.keySet().size();
                 int numberOfDocsMaxWithTerm = (int)(((double)numberOfDocs)/5.0); // Param number of docs with term max
                 for(String term : currDocRelevant)
@@ -102,14 +102,14 @@ public class Query {
                     
                     
                     // SPEED UP !!!!!!!! 
-                    /*if(numberOfDocsMaxWithTerm<pl.size())
+                    if(numberOfDocsMaxWithTerm<pl.size() && SearchGUI.speed_up)
                     {
                         continue;
-                    }*/
+                    }
                     
                     // Tf
                     double tf = 1;
-                    /*LinkedList<PostingsEntry> list = pl.get_list();
+                    LinkedList<PostingsEntry> list = pl.get_list();
                     for(PostingsEntry pe : list)
                     {
                         if(pe.docID == docID)
@@ -117,7 +117,7 @@ public class Query {
                             tf = pe.list.size();
                             break;
                         }
-                    }*/
+                    }
                     
                     tf = (double)(tf/length); // Normalization
 

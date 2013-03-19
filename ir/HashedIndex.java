@@ -23,19 +23,16 @@ import java.util.HashSet;
  */
 public class HashedIndex implements Index {
 
-    /** The index as a hashtable. */
-    private HashMap<String,PostingsList> index = new HashMap<String,PostingsList>();
-    public HashMap<Integer,Integer> numberDocs = new HashMap<Integer,Integer>();
+	/** The index as a hashtable. */
+	private HashMap<String,PostingsList> index = new HashMap<String,PostingsList>();
+	public HashMap<Integer,Integer> numberDocs = new HashMap<Integer,Integer>();
 
 
-    /**
-     *  Inserts this token in the index.
-     */
-    public void insert( String token, int docID, int offset ) {
-	//
-	//  YOUR CODE HERE
-	//
-		//;
+	/**
+	 *  Inserts this token in the index.
+	 */
+	public void insert( String token, int docID, int offset ) {
+
 		if(numberDocs.containsKey(docID)) {
 			Integer n = numberDocs.get(docID);
 			numberDocs.put(docID,n+1);
@@ -48,31 +45,31 @@ public class HashedIndex implements Index {
 			index.put(token,list);
 		}
 		list.put(docID,offset,true);
-    }
+	}
 
 
-    /**
-     *  Returns the postings for a specific term, or null
-     *  if the term is not in the index.
-     */
-    public PostingsList getPostings( String token ) {
-    
+	/**
+	 *  Returns the postings for a specific term, or null
+	 *  if the term is not in the index.
+	 */
+	public PostingsList getPostings( String token ) {
+
 		return index.get(token);
-    }
+	}
 
 
-    /**
-     *  Searches the index for postings matching the query.
-     */
-    public PostingsList search( Query query, int queryType, int rankingType ) {
+	/**
+	 *  Searches the index for postings matching the query.
+	 */
+	public PostingsList search( Query query, int queryType, int rankingType ) {
 
 		PostingsList result = null;
 		double time = 0;
-		
+
 		/*****************************
-		****CASE OF TF_IDF RANKING****
-		*****************************/
-		
+		 ****CASE OF TF_IDF RANKING****
+		 *****************************/
+
 		if(rankingType == Index.TF_IDF) {
 			if(queryType == Index.INTERSECTION_QUERY || queryType == Index.PHRASE_QUERY) { 
 				for(int i=0; i<query.terms.size(); i++) {
@@ -104,14 +101,14 @@ public class HashedIndex implements Index {
 						tabScoresTerms[i].computeScore(numberDocs, docLengths, query, termQuery);
 					}
 				}
-			
+
 				result = tabScoresTerms[0];
-				
+
 				for(int i=1; i<query.terms.size(); i++) {
 					//System.err.println(result.size());
 					result = result.reunion(tabScoresTerms[i]); //In PostingsList
 				}
-			
+
 				PostingsList result2 = new PostingsList();
 				ListIterator<PostingsEntry> resultIterator = result.get_list().listIterator(0);
 				while(resultIterator.hasNext()) {
@@ -129,14 +126,14 @@ public class HashedIndex implements Index {
 				return null;
 			}
 		}
-		
+
 		/*****************************
-		***CASE OF PAGERANK RANKING***
-		*****************************/
-		
+		 ***CASE OF PAGERANK RANKING***
+		 *****************************/
+
 		else if(rankingType == Index.PAGERANK) {
-    		//ToDo
-    		if(queryType == Index.RANKED_QUERY){
+			//ToDo
+			if(queryType == Index.RANKED_QUERY){
 				PostingsList tabScoresTerms[] = new PostingsList[query.terms.size()];
 				for(int i=0; i<query.terms.size(); i++) {
 					if(getPostings(query.terms.get(i)) == null)
@@ -147,17 +144,17 @@ public class HashedIndex implements Index {
 						tabScoresTerms[i].computeScore(numberDocs, docLengths);
 					}
 				}
-			
+
 				result = tabScoresTerms[0];
-				
+
 				for(int i=1; i<query.terms.size(); i++) {
 					System.err.println(result.size());
 					result = result.reunion(tabScoresTerms[i]); //In PostingsList
 				}
-			
+
 				PostingsList result2 = new PostingsList();
 				ListIterator<PostingsEntry> resultIterator = result.get_list().listIterator(0);
-												
+
 				while(resultIterator.hasNext()) {
 					PostingsEntry cur = resultIterator.next();
 					//System.err.println(Index.docIDs.get(""+cur.docID)+" pour docID  "+cur.docID);  Line to know the name of files used !!!!!!!!!!!!
@@ -171,14 +168,14 @@ public class HashedIndex implements Index {
 				//ToDO
 				return null;
 			}
-    	}
-    	
-    	/*****************************
-		*CASE OF COMBINATION RANKING**
-		*****************************/
-    	
-    	else {
-    		if(queryType == Index.RANKED_QUERY){
+		}
+
+		/*****************************
+		 *CASE OF COMBINATION RANKING**
+		 *****************************/
+
+		else {
+			if(queryType == Index.RANKED_QUERY){
 				PostingsList tabScoresTerms[] = new PostingsList[query.terms.size()];
 				for(int i=0; i<query.terms.size(); i++) {
 					if(getPostings(query.terms.get(i)) == null)
@@ -188,17 +185,17 @@ public class HashedIndex implements Index {
 						tabScoresTerms[i].computeScore(numberDocs, docLengths);
 					}
 				}
-			
+
 				result = tabScoresTerms[0];
-				
+
 				for(int i=1; i<query.terms.size(); i++) {
 					System.err.println(result.size());
 					result = result.reunion(tabScoresTerms[i]); //In PostingsList
 				}
-			
+
 				PostingsList result2 = new PostingsList();
 				ListIterator<PostingsEntry> resultIterator = result.get_list().listIterator(0);
-												
+
 				while(resultIterator.hasNext()) {
 					PostingsEntry cur = resultIterator.next();
 					//System.err.println(Index.docIDs.get(""+cur.docID)+" pour docID  "+cur.docID);  //Line to know the name of files used !!!!!!!!!!!!
@@ -212,23 +209,23 @@ public class HashedIndex implements Index {
 				//ToDO
 				return null;
 			}
-    	}
-    }
-    
-    public void addTerm(int docID, String token)
-    {
-        HashSet<String> tmp = terms.get(docID);
-        if(tmp == null)
-        {
-            tmp = new HashSet<String>();
-            terms.put(docID, tmp);
-        }
-        tmp.add(token);
-    }
-    
-    /**
-     *  No need for cleanup in a HashedIndex.
-     */
-    public void cleanup() {
-    }
+		}
+	}
+
+	public void addTerm(int docID, String token)
+	{
+		HashSet<String> tmp = terms.get(docID);
+		if(tmp == null)
+		{
+			tmp = new HashSet<String>();
+			terms.put(docID, tmp);
+		}
+		tmp.add(token);
+	}
+
+	/**
+	 *  No need for cleanup in a HashedIndex.
+	 */
+	public void cleanup() {
+	}
 }

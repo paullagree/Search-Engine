@@ -76,7 +76,7 @@ public class PostingsEntry implements Comparable<PostingsEntry>, Serializable {
     }
     
     public void computeScore(int nbDocsWithWord, HashMap<Integer,Integer> numberDocs, HashMap<String,Integer> docLengths, Query query, String termQuery) {
-    	// Compute here the new score
+    	// Compute here the new score with weights for query terms
     	double N = (double)numberDocs.size();
     	this.score = (query.weights.get(termQuery))*((double)list.size())*Math.log(N/nbDocsWithWord)/docLengths.get(""+docID);
     	this.sommeCarre = this.score*this.score;
@@ -84,7 +84,6 @@ public class PostingsEntry implements Comparable<PostingsEntry>, Serializable {
     }
     
     public void normalizeScore() {
-    	//System.err.println("ok");
     	this.score = this.score/(Math.sqrt(this.squareQuery)*Math.sqrt(this.sommeCarre));
     }
 

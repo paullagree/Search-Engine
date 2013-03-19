@@ -61,6 +61,9 @@ public class SearchGUI extends JFrame {
 	
 	/**  Kind of Index */
 	public static int kindOfIndex = Index.HASHED_INDEX;
+	
+	/**  Speed up or not */
+	public static boolean speed_up = false;
 
 	/**  Directory from which the code is compiled and run. */
 	public static final String homeDir = "/home/paul/Dropbox/KTH/Search Engines and Information Retrieval Systems/Lab1/Search-Engine";
@@ -384,14 +387,20 @@ public class SearchGUI extends JFrame {
 				String dumb = args[i++];
 				
 				if (dumb.equals("1")) {
-					System.err.println("bad");
 					kindOfIndex = Index.MEGA_INDEX;
 				}
 				else if (dumb.equals("2")) {
-					System.err.println("ok");
 					kindOfIndex = Index.BIWORDS_INDEX;
 				}
+				else if (dumb.equals("3")) {
+					kindOfIndex = Index.NGRAM_INDEX;
+				}
 					
+			}
+			
+			else if ( "-s".equals( args[i] )) {
+				i++;
+				speed_up = true;
 			}
 
 			else {
